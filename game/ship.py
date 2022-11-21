@@ -1,5 +1,6 @@
 import pygame
 pygame.init()
+from pygame.sprite import Sprite
 
 class Ship():
 
