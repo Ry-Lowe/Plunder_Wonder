@@ -19,6 +19,8 @@ class PlunderWonder:
         self.ship = Ship(self)
         self.gold = pygame.sprite.Group()
         self.create_gold()
+        self.ship = pygame.sprite.Sprite()
+
 
 
     def run_game(self):
@@ -61,6 +63,9 @@ class PlunderWonder:
 
 
 
+
+
+
     def draw_background(self):
         for y in range(10):
             for x in range(14):
@@ -71,7 +76,7 @@ class PlunderWonder:
         water_rect.topleft = self.screen_rect.topleft
     def update_screen(self):
         self.draw_background()
-        self.ship.blitme()
+        self.ship.draw(self.screen)
         self.gold.draw(self.screen)
         pygame.display.flip()
 
