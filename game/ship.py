@@ -16,6 +16,10 @@ class Ship(Sprite):
         self.moving_left = False
         self.settings = game.settings
         self.x = float(self.rect.x)
+        self.rect.y = self.rect.y - 20
+
+
+
     def blitme(self):
         self.screen.blit(self.image, self.rect)
 
@@ -28,4 +32,5 @@ class Ship(Sprite):
 
     def center_ship(self):
         self.rect.midbottom = self.screen_rect.midbottom
+        self.rect.y = self.rect.y - 20
         self.x = float(self.rect.x)

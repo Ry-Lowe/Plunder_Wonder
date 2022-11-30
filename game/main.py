@@ -5,6 +5,7 @@ from ship import Ship
 from settings import Settings
 from gold import Gold
 from random import randint
+from island import Island
 
 water = pygame.image.load('tile_73.png')
 water_rect = water.get_rect()
@@ -17,9 +18,11 @@ class PlunderWonder:
         self.screen = pygame.display.set_mode((896, 640))
         self.screen_rect = self.screen.get_rect()
         self.ship = Ship(self)
+        self.island = Island(self)
         self.gold = pygame.sprite.Group()
         self.create_gold()
-        self.ship = pygame.sprite.Sprite()
+
+
 
 
 
@@ -30,6 +33,9 @@ class PlunderWonder:
             self.ship.update()
             self.update_screen()
             self.gold.update()
+            self.island.update()
+            if (self.island.rect.x -64) < self.gold.rect.x < (self.island.rect.x +256):
+                self.gold.rect.x = self.island.rect.x - 100
             clock.tick(60)
 
     def check_events(self):
@@ -76,8 +82,9 @@ class PlunderWonder:
         water_rect.topleft = self.screen_rect.topleft
     def update_screen(self):
         self.draw_background()
-        self.ship.draw(self.screen)
         self.gold.draw(self.screen)
+        self.island.blitme(self.screen)
+        self.ship.blitme()
         pygame.display.flip()
 
 
