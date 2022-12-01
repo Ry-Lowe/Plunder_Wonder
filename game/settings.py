@@ -1,4 +1,6 @@
 import pygame
+
+
 pygame.init()
 
 class Settings():
@@ -6,3 +8,4 @@ class Settings():
         self.ship_speed = 8
         self.gold_fall_speed = 5
         self.island_fall_speed = 5
+
