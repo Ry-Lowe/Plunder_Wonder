@@ -2,6 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 import settings
 from random import randint
+
 pygame.init()
 
 class Island(Sprite):
@@ -77,9 +78,12 @@ class Island(Sprite):
         self.rect.y += self.settings.island_fall_speed
         if self.rect.y > 896:
             self.rect.y = -256
-            self.rect.x = randint(0, 640 - 256)
+            self.rect.x = randint(0, 896 - 256)
 
 
+        go = pygame.surface.Surface((500, 200))
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        text = font.render("Wrecked", True, (255, 0, 0), (0, 0, 0))
+        text_rect = text.get_rect()
+        go.blit(text, text_rect)
 
-    def blitme(self, surface):
-        surface.blit(self.image, self.rect)

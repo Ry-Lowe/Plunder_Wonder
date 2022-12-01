@@ -18,6 +18,12 @@ class Gold(Sprite):
         if self.rect.y > 896:
             self.rect.y = -64
             self.rect.x = randint(0, 640 - 64)
+            self.image = pygame.image.load('treasurechest.png')
+
+    def collect(self):
+        self.image = pygame.image.load('tile_73.png')
+
+
 
 
 
