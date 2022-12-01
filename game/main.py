@@ -9,7 +9,14 @@ from island import Island
 
 water = pygame.image.load('tile_73.png')
 water_rect = water.get_rect()
-
+background = pygame.surface.Surface((896, 640))
+for y in range(10):
+    for x in range(14):
+        background.blit(water, water_rect)
+        water_rect.x += water_rect.width
+    water_rect.x = 0
+    water_rect.y += water_rect.height
+water_rect.topleft = (0,0)
 
 class PlunderWonder:
     def __init__(self):
@@ -19,12 +26,9 @@ class PlunderWonder:
         self.screen_rect = self.screen.get_rect()
         self.ship = Ship(self)
         self.island = Island(self)
-        self.gold = pygame.sprite.Group()
-        self.create_gold()
-
-
-
-
+        self.gold = Gold(self)
+        self.objects = pygame.sprite.Group()
+        self.objects.add((self.gold, self.island, self.ship))
 
     def run_game(self):
         clock = pygame.time.Clock()
@@ -34,8 +38,8 @@ class PlunderWonder:
             self.update_screen()
             self.gold.update()
             self.island.update()
-            if (self.island.rect.x -64) < self.gold.rect.x < (self.island.rect.x +256):
-                self.gold.rect.x = self.island.rect.x - 100
+            #if (self.island.rect.x -64) < self.gold.rect.x < (self.island.rect.x +256):
+            #    self.gold.rect.x = self.island.rect.x - 100
             clock.tick(60)
 
     def check_events(self):
@@ -61,30 +65,9 @@ class PlunderWonder:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
-    def create_gold(self):
-        gold = Gold(self)
-        gold.rect.x = randint(0, 640-64)
-        gold.rect.y = -64
-        self.gold.add(gold)
-
-
-
-
-
-
-    def draw_background(self):
-        for y in range(10):
-            for x in range(14):
-                self.screen.blit(water, water_rect)
-                water_rect.x += water_rect.width
-            water_rect.x = 0
-            water_rect.y += water_rect.height
-        water_rect.topleft = self.screen_rect.topleft
     def update_screen(self):
-        self.draw_background()
-        self.gold.draw(self.screen)
-        self.island.blitme(self.screen)
-        self.ship.blitme()
+        self.screen.blit(background, (0,0))
+        self.objects.draw(self.screen)
         pygame.display.flip()
 
 
