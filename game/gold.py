@@ -12,16 +12,20 @@ class Gold(Sprite):
         self.image = pygame.image.load('treasurechest.png')
         self.rect = self.image.get_rect()
         self.settings = game.settings
+        self.ship_gold_flag = False
 
     def update(self):
         self.rect.y += self.settings.gold_fall_speed
-        if self.rect.y > 896:
+        if self.rect.y > 896 or self.ship_gold_flag == True:
             self.rect.y = -64
             self.rect.x = randint(0, 640 - 64)
             self.image = pygame.image.load('treasurechest.png')
+            self.ship_gold_flag = False
 
     def collect(self):
-        self.image = pygame.image.load('tile_73.png')
+        #self.image = pygame.image.load('tile_73.png')
+        self.kill()
+
 
 
 

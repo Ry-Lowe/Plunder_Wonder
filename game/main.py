@@ -18,7 +18,7 @@ for y in range(10):
     water_rect.x = 0
     water_rect.y += water_rect.height
 water_rect.topleft = (0,0)
-
+score_surface = pygame.surface.Surface((50, 50))
 
 
 class PlunderWonder:
@@ -33,6 +33,9 @@ class PlunderWonder:
         self.objects = pygame.sprite.Group()
         self.objects.add((self.gold, self.island, self.ship))
         self.endgame = False
+        self.scoren = 0
+
+
 
     def run_game(self):
         clock = pygame.time.Clock()
@@ -48,6 +51,7 @@ class PlunderWonder:
             self.ship.update()
             self.gold.update()
             self.island.update()
+            self.score()
             self.update_screen()
             clock.tick(60)
 
@@ -60,6 +64,7 @@ class PlunderWonder:
         self.ship.image = pygame.transform.rotate(self.ship.image, 180)
         self.ship.rect.midbottom = self.screen_rect.midbottom
         self.ship.rect.y -= 20
+        self.scoren = 0
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -90,7 +95,11 @@ class PlunderWonder:
         ship_island = pygame.sprite.collide_rect(self.ship, self.island)
         gold_island = pygame.sprite.collide_rect(self.gold, self.island)
         if ship_gold == True:
-            self.gold.collect()
+            self.gold.ship_gold_flag = True
+            self.gold.kill()
+            self.gold.update()
+            self.scoren += 1
+            self.objects.add(self.gold)
         if ship_island == True:
             self.ship.wreck()
             self.endgame = True
@@ -103,11 +112,18 @@ class PlunderWonder:
 
 
 
-
+    def score(self):
+        score_font = pygame.font.Font('Radio_Space.ttf', 65)
+        scorer = score_font.render(f"{self.scoren}", True, (255, 255, 255), (0, 0, 0))
+        scorer_rect = scorer.get_rect()
+        scorer_rect.x = 0
+        scorer_rect.y = 0
+        score_surface.blit(scorer, scorer_rect)
 
     def update_screen(self):
         self.screen.blit(background, (0,0))
         self.objects.draw(self.screen)
+        self.screen.blit(score_surface, (840, 0))
         pygame.display.flip()
 
 
