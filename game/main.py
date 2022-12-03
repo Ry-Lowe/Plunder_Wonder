@@ -18,7 +18,7 @@ for y in range(10):
     water_rect.x = 0
     water_rect.y += water_rect.height
 water_rect.topleft = (0,0)
-score_surface = pygame.surface.Surface((50, 50))
+score_surface = pygame.surface.Surface((140, 50))
 
 
 class PlunderWonder:
@@ -34,6 +34,7 @@ class PlunderWonder:
         self.objects.add((self.gold, self.island, self.ship))
         self.endgame = False
         self.scoren = 0
+
 
 
 
@@ -53,6 +54,9 @@ class PlunderWonder:
             self.island.update()
             self.score()
             self.update_screen()
+            x = pygame.time.get_ticks()
+            self.gold.fall_time = x
+            self.island.fall_time = x
             clock.tick(60)
 
     def restart(self):
@@ -123,7 +127,7 @@ class PlunderWonder:
     def update_screen(self):
         self.screen.blit(background, (0,0))
         self.objects.draw(self.screen)
-        self.screen.blit(score_surface, (840, 0))
+        self.screen.blit(score_surface, (760, 0))
         pygame.display.flip()
 
 

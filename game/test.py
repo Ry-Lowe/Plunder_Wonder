@@ -1,18 +1,6 @@
 import pygame
 import time
-print(pygame.font.get_fonts())
-print(pygame.font.match_font('informalroman'))
-screen = pygame.display.set_mode((800, 600))
-
 pygame.init()
-go = pygame.surface.Surface((500, 200))
-font = pygame.font.Font('Radio_Space.ttf', 100)
-text = font.render("5", True, (255, 0, 0), (0, 80, 0))
-text_rect = text.get_rect()
-go.blit(text, text_rect)
-go_rect = go.get_rect()
-
-screen.blit(go, (0,0))
-pygame.display.flip()
-
-time.sleep(4)
+x = pygame.time.Clock
+pygame.time.get_ticks()
+print(pygame.time.get_ticks())

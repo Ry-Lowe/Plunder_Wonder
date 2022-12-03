@@ -2,6 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 import settings
 from random import randint
+import math
 
 pygame.init()
 
@@ -73,9 +74,10 @@ class Island(Sprite):
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midtop
         self.settings = game.settings
+        self.fall_time = 0
 
     def update(self):
-        self.rect.y += self.settings.island_fall_speed
+        self.rect.y += 3 + math.sqrt((self.fall_time) / (1000))
         if self.rect.y > 896:
             self.rect.y = -256
             self.rect.x = randint(0, 896 - 256)
