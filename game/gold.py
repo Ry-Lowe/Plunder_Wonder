@@ -24,9 +24,6 @@ class Gold(Sprite):
             self.image = pygame.image.load('treasurechest.png')
             self.ship_gold_flag = False
 
-    def collect(self):
-        #self.image = pygame.image.load('tile_73.png')
-        self.kill()
 
 
 

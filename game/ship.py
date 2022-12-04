@@ -33,8 +33,6 @@ class Ship(Sprite):
     def wreck(self):
         self.image = pygame.image.load("ship (13).png")
         self.image = pygame.transform.rotate(self.image, 137)
-        self.settings.gold_fall_speed = 0
-        self.settings.island_fall_speed = 0
         self.rect.y = 450
     def center_ship(self):
         self.rect.midbottom = self.screen_rect.midbottom

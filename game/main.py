@@ -18,7 +18,11 @@ for y in range(10):
     water_rect.x = 0
     water_rect.y += water_rect.height
 water_rect.topleft = (0,0)
-score_surface = pygame.surface.Surface((140, 50))
+score_surface = pygame.surface.Surface((140, 65))
+final_score = 0
+high_scoren = 0
+game_end_time = 1
+
 
 
 class PlunderWonder:
@@ -34,18 +38,23 @@ class PlunderWonder:
         self.objects.add((self.gold, self.island, self.ship))
         self.endgame = False
         self.scoren = 0
+        self.time = 0
+        self.game_end_time = game_end_time
+        self.final_score = self.scoren
 
 
 
 
     def run_game(self):
         clock = pygame.time.Clock()
+        self.game_end_time = pygame.time.get_ticks()
         while True:
             self.check_events()
             self.check_collisions()
             if self.endgame == True:
                 self.ship.update()
                 self.update_screen()
+                self.final_score = self.scoren
                 time.sleep(2)
                 self.restart()
                 break
@@ -54,21 +63,27 @@ class PlunderWonder:
             self.island.update()
             self.score()
             self.update_screen()
-            x = pygame.time.get_ticks()
-            self.gold.fall_time = x
-            self.island.fall_time = x
+            self.time = pygame.time.get_ticks()
+            self.new_game_time = self.time - self.game_end_time
+            self.gold.fall_time = self.new_game_time
+            self.island.fall_time = self.new_game_time
+            print(self.gold.fall_time)
             clock.tick(60)
 
     def restart(self):
         self.endgame = False
-        self.settings.gold_fall_speed = 5
-        self.settings.island_fall_speed = 5
         self.island.rect.y = -256
         self.ship.image = pygame.image.load("ship (1).png")
         self.ship.image = pygame.transform.rotate(self.ship.image, 180)
         self.ship.rect.midbottom = self.screen_rect.midbottom
         self.ship.rect.y -= 20
         self.scoren = 0
+        self.gold.fall_time = self.new_game_time
+        self.island.fall_time = self.new_game_time
+        self.ship.moving_right = False
+        self.ship.moving_left = False
+        score_surface.fill((0, 0, 0))
+
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -121,7 +136,7 @@ class PlunderWonder:
         scorer = score_font.render(f"{self.scoren}", True, (255, 255, 255), (0, 0, 0))
         scorer_rect = scorer.get_rect()
         scorer_rect.x = 0
-        scorer_rect.y = 0
+        scorer_rect.y = 10
         score_surface.blit(scorer, scorer_rect)
 
     def update_screen(self):
@@ -144,13 +159,29 @@ def menu():
     begin_rect.x = 248
     begin_rect.y = 400
     title_rect.x = 140
+    high_scoren = PW.final_score
+    font3 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 100)
+    high_score = font3.render(f"High Score: {0}", True, (255, 0, 0), (0, 0, 0))
+    high_score_rect = high_score.get_rect()
+    high_score_rect.x = 210
+    high_score_rect.y = 200
+    font4 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 75)
+    quit = font4.render("Press q to quit", True, (255, 0, 0), (0, 0, 0))
+    quit_rect = quit.get_rect()
+    quit_rect.x = 250
+    quit_rect.y = 550
+    start.blit(quit, quit_rect)
+    start.blit(high_score, high_score_rect)
     start.blit(title, title_rect)
     start.blit(begin, begin_rect)
     start_rect = start.get_rect()
     start_rect.center = screen_rect.center
     screen.blit(start, start_rect)
+PW = PlunderWonder()
+menu()
 def end_screen():
 
+    global high_scoren
     go = pygame.surface.Surface((896,640))
     font = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 200)
     text = font.render("Wrecked", True, (255, 0, 0), (0, 0, 0))
@@ -163,21 +194,44 @@ def end_screen():
     restart_rect.x = 210
     restart_rect.y = 400
     go.blit(text, text_rect)
+    font2 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 100)
+    your_score = font2.render(f"Your Score: {PW.final_score}", True, (255, 0, 0), (0, 0, 0))
+    your_score_rect = your_score.get_rect()
+    your_score_rect.x = 210
+    your_score_rect.y = 210
+    go.blit(your_score, your_score_rect)
     go.blit(restart, restart_rect)
+    if PW.final_score > high_scoren:
+        high_scoren = PW.final_score
+    font3 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 100)
+    high_score = font3.render(f"High Score: {high_scoren}", True, (255, 0, 0), (0, 0, 0))
+    high_score_rect = high_score.get_rect()
+    high_score_rect.x = 210
+    high_score_rect.y = 310
+    go.blit(high_score, high_score_rect)
+    font4 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 75)
+    quit = font4.render("Press q to quit", True, (255, 0, 0), (0, 0, 0))
+    quit_rect = quit.get_rect()
+    quit_rect.x = 250
+    quit_rect.y = 550
+    go.blit(quit, quit_rect)
     go_rect = go.get_rect()
     go_rect.center = screen_rect.center
     screen.blit(go, go_rect)
     pygame.display.flip()
-PW = PlunderWonder()
-menu()
+
 pygame.display.flip()
 while True:
+
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             PW.run_game()
             end_screen()
             continue
-        if event.type == pygame.QUIT:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+                sys.exit()
+        elif event.type == pygame.QUIT:
             sys.exit()
 
 
