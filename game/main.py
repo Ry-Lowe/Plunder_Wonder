@@ -4,6 +4,7 @@ from ship import Ship
 from gold import Gold
 from random import randint
 from island import Island
+from cannonball import Cannonball
 import time
 pygame.init()
 pygame.display.set_caption("Plunder Wonder!")
@@ -30,10 +31,11 @@ class PlunderWonder:
         self.screen = pygame.display.set_mode((896, 640))
         self.screen_rect = self.screen.get_rect()
         self.ship = Ship(self)
-        self.island = Island(self)
+        self.island = Island()
         self.gold = Gold(self)
+        self.cannonball = Cannonball(self)
         self.objects = pygame.sprite.Group()
-        self.objects.add((self.gold, self.island, self.ship))
+        self.objects.add((self.gold, self.island, self.ship, self.cannonball))
         self.endgame = False
         self.scoren = 0
         self.time = 0
@@ -59,6 +61,7 @@ class PlunderWonder:
             self.ship.update()
             self.gold.update()
             self.island.update()
+            self.cannonball.update()
             self.score()
             self.update_screen()
             self.time = pygame.time.get_ticks()

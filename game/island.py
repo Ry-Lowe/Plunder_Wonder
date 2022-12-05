@@ -1,16 +1,15 @@
 import pygame
 from pygame.sprite import Sprite
-
 from random import randint
 import math
 
 pygame.init()
 
 class Island(Sprite):
-    def __init__(self, game):
+    def __init__(self):
         super().__init__()
-        self.screen = game.screen
-        self.screen_rect = game.screen.get_rect()
+        #self.screen = game.screen
+        #self.screen_rect = game.screen.get_rect()
 
         self.image = pygame.surface.Surface((256, 256))
         self.image.blit(pygame.image.load("tile_73.png"),
@@ -71,12 +70,35 @@ class Island(Sprite):
         self.image.blit(pygame.image.load("tile_57.png"),
                         (192, 192))
 
+        self.image.blit(pygame.image.load("tile_82.png"),
+                        (64, 192))
+
+        self.image.blit(pygame.image.load("tile_77.png"),
+                        (64, 0))
+        self.image.blit(pygame.image.load("tile_47.png"),
+                        (128, 0))
+        self.image.blit(pygame.image.load("tile_78.png"),
+                        (192, 0))
+        self.image.blit(pygame.image.load("tile_32.png"),
+                        (64, 64))
+        self.image.blit(pygame.image.load("tile_31.png"),
+                        (192, 64))
+        self.image.blit(pygame.image.load("tile_93.png"),
+                        (64, 128))
+        self.image.blit(pygame.image.load("tile_48.png"),
+                        (128, 128))
+        self.image.blit(pygame.image.load("tile_94.png"),
+                        (192, 128))
+
+
         self.rect = self.image.get_rect()
-        self.rect.midbottom = self.screen_rect.midtop
+        self.rect.midbottom = (448, 0)
         self.fall_time = 0
+        self.fall_speed = 0
 
     def update(self):
-        self.rect.y += 3 + math.sqrt((self.fall_time) / (1000))
+        self.fall_speed = 3 + math.sqrt((self.fall_time) / (1000))
+        self.rect.y += self.fall_speed
         if self.rect.y > 896:
             self.rect.y = -256
             self.rect.x = randint(0, 896 - 256)
