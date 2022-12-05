@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-import settings
+
 from random import randint
 import math
 
@@ -73,7 +73,6 @@ class Island(Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midtop
-        self.settings = game.settings
         self.fall_time = 0
 
     def update(self):

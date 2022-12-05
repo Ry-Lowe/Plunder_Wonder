@@ -14,7 +14,6 @@ class Ship(Sprite):
         self.rect.midbottom = self.screen_rect.midbottom
         self.moving_right = False
         self.moving_left = False
-        self.settings = game.settings
         self.x = float(self.rect.x)
         self.rect.y = self.rect.y - 20
 

@@ -1,7 +1,6 @@
 import pygame
 import sys
 from ship import Ship
-from settings import Settings
 from gold import Gold
 from random import randint
 from island import Island
@@ -28,7 +27,6 @@ game_end_time = 1
 class PlunderWonder:
     def __init__(self):
         pygame.init()
-        self.settings = Settings()
         self.screen = pygame.display.set_mode((896, 640))
         self.screen_rect = self.screen.get_rect()
         self.ship = Ship(self)
@@ -67,7 +65,7 @@ class PlunderWonder:
             self.new_game_time = self.time - self.game_end_time
             self.gold.fall_time = self.new_game_time
             self.island.fall_time = self.new_game_time
-            print(self.gold.fall_time)
+            print(self.gold.fall_speed)
             clock.tick(60)
 
     def restart(self):
