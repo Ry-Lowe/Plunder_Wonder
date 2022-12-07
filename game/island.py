@@ -5,13 +5,12 @@ import math
 
 pygame.init()
 
+
 class Island(Sprite):
     def __init__(self):
         super().__init__()
-        #self.screen = game.screen
-        #self.screen_rect = game.screen.get_rect()
 
-        self.image = pygame.surface.Surface((256, 256))
+        self.image = pygame.surface.Surface((256, 256))  # define surface to blit island tiles on
         self.image.blit(pygame.image.load("tile_73.png"),
                         (0, 0))
         self.image.blit(pygame.image.load("tile_06.png"),
@@ -89,20 +88,15 @@ class Island(Sprite):
                         (128, 128))
         self.image.blit(pygame.image.load("tile_94.png"),
                         (192, 128))
-
-
         self.rect = self.image.get_rect()
-        self.rect.midbottom = (448, 0)
+        self.rect.y = -256
+        self.rect.x = 448
         self.fall_time = 0
         self.fall_speed = 0
 
-    def update(self):
-        self.fall_speed = 3 + math.sqrt((self.fall_time) / (1000))
+    def update(self):  # update the y so the island falls
+        self.fall_speed = 3 + math.sqrt(self.fall_time / 1000)  # falling increasing as a function of time
         self.rect.y += self.fall_speed
         if self.rect.y > 896:
             self.rect.y = -256
             self.rect.x = randint(0, 896 - 256)
-
-
-
-

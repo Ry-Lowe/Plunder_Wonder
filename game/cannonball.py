@@ -16,15 +16,15 @@ class Cannonball(Sprite):
         self.fall_time = 0
         self.speed_y = 0
         self.speed_x = 4
-        self.island = Island()
-        self.rect.y = self.island.rect.y + 96
-        self.rect.x = self.island.rect.x + 228
+        self.island = Island(self)
+        self.rect.y = 20
+        self.rect.x = 20
+        self.fall_time = 0
 
     def update(self):
-        self.rect.y = self.island.rect.y + 96
-        if self.rect.y > 150:
-            self.rect.x += 4
-        if self.rect.x > 640 or self.rect.y > 896:
-            self.rect.y = self.island.rect.y + 96
-            self.rect.x = self.island.rect.x + 228
-            self.image = pygame.image.load('cannonBall.png')
+        self.island = Island(self)
+        self.rect.y = self.island.rect.y + 164
+        if self.rect.y > 896:
+            self.rect.y = -10
+            #self.ship_gold_flag = False
+

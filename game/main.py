@@ -4,11 +4,13 @@ from ship import Ship
 from gold import Gold
 from random import randint
 from island import Island
-from cannonball import Cannonball
 import time
+
 pygame.init()
-pygame.display.set_caption("Plunder Wonder!")
-water = pygame.image.load('tile_73.png')
+pygame.mixer.music.load('intense.mp3')  # Background music
+pygame.mixer.music.play(-1)
+pygame.display.set_caption("Plunder Wonder!")  # window title
+water = pygame.image.load('tile_73.png')  # create background
 water_rect = water.get_rect()
 background = pygame.surface.Surface((896, 640))
 for y in range(10):
@@ -17,12 +19,13 @@ for y in range(10):
         water_rect.x += water_rect.width
     water_rect.x = 0
     water_rect.y += water_rect.height
-water_rect.topleft = (0,0)
-score_surface = pygame.surface.Surface((140, 65))
+water_rect.topleft = (0, 0)
+score_surface = pygame.surface.Surface((140, 65))  # creates a surface to draw score
 final_score = 0
 high_scoren = 0
 game_end_time = 1
-
+screen = pygame.display.set_mode((896, 640))  # create screen and rect
+screen_rect = screen.get_rect()
 
 
 class PlunderWonder:
@@ -33,17 +36,13 @@ class PlunderWonder:
         self.ship = Ship(self)
         self.island = Island()
         self.gold = Gold(self)
-        self.cannonball = Cannonball(self)
         self.objects = pygame.sprite.Group()
-        self.objects.add((self.gold, self.island, self.ship, self.cannonball))
+        self.objects.add((self.gold, self.island, self.ship))
         self.endgame = False
         self.scoren = 0
         self.time = 0
         self.game_end_time = game_end_time
         self.final_score = self.scoren
-
-
-
 
     def run_game(self):
         clock = pygame.time.Clock()
@@ -51,7 +50,7 @@ class PlunderWonder:
         while True:
             self.check_events()
             self.check_collisions()
-            if self.endgame == True:
+            if self.endgame:
                 self.ship.update()
                 self.update_screen()
                 self.final_score = self.scoren
@@ -61,7 +60,6 @@ class PlunderWonder:
             self.ship.update()
             self.gold.update()
             self.island.update()
-            self.cannonball.update()
             self.score()
             self.update_screen()
             self.time = pygame.time.get_ticks()
@@ -108,29 +106,25 @@ class PlunderWonder:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
-
-
     def check_collisions(self):
         ship_gold = pygame.sprite.collide_rect(self.ship, self.gold)
         ship_island = pygame.sprite.collide_rect(self.ship, self.island)
         gold_island = pygame.sprite.collide_rect(self.gold, self.island)
-        if ship_gold == True:
+        if ship_gold:
             self.gold.ship_gold_flag = True
             self.gold.kill()
             self.gold.update()
             self.scoren += 1
             self.objects.add(self.gold)
-        if ship_island == True:
+        if ship_island:
             self.ship.wreck()
             self.endgame = True
 
-        if gold_island == True:
+        if gold_island:
             if self.island.rect.x > 70:
                 self.gold.rect.x = randint(0, self.island.rect.x)
             elif self.island.rect.x < 70:
                 self.gold.rect.x = randint(self.island.rect.x + 256, 826)
-
-
 
     def score(self):
         score_font = pygame.font.Font('Radio_Space.ttf', 65)
@@ -141,16 +135,14 @@ class PlunderWonder:
         score_surface.blit(scorer, scorer_rect)
 
     def update_screen(self):
-        self.screen.blit(background, (0,0))
+        self.screen.blit(background, (0, 0))
         self.objects.draw(self.screen)
         self.screen.blit(score_surface, (760, 0))
         pygame.display.flip()
 
 
-screen = pygame.display.set_mode((896, 640))
-screen_rect = screen.get_rect()
-def menu():
-    start = pygame.surface.Surface((896, 640))
+def menu():  # start screen
+    start = pygame.surface.Surface((896, 640))  # create start surface
     font1 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 100)
     font2 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 75)
     title = font1.render("Plunder_Wonder!", True, (0, 0, 255), (0, 0, 0))
@@ -160,30 +152,26 @@ def menu():
     begin_rect.x = 248
     begin_rect.y = 400
     title_rect.x = 140
-    high_scoren = PW.final_score
-    font3 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 100)
-    high_score = font3.render(f"High Score: {0}", True, (255, 0, 0), (0, 0, 0))
-    high_score_rect = high_score.get_rect()
-    high_score_rect.x = 210
-    high_score_rect.y = 200
     font4 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 75)
-    quit = font4.render("Press q to quit", True, (255, 0, 0), (0, 0, 0))
-    quit_rect = quit.get_rect()
+    quit1 = font4.render("Press q to quit", True, (255, 0, 0), (0, 0, 0))
+    quit_rect = quit1.get_rect()
     quit_rect.x = 250
     quit_rect.y = 550
-    start.blit(quit, quit_rect)
-    start.blit(high_score, high_score_rect)
+    start.blit(quit1, quit_rect)
     start.blit(title, title_rect)
     start.blit(begin, begin_rect)
     start_rect = start.get_rect()
     start_rect.center = screen_rect.center
     screen.blit(start, start_rect)
-PW = PlunderWonder()
-menu()
-def end_screen():
 
+
+PW = PlunderWonder()  # call game class
+menu()  # run start screen
+
+
+def end_screen():  # create end screen
     global high_scoren
-    go = pygame.surface.Surface((896,640))
+    go = pygame.surface.Surface((896, 640))
     font = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 200)
     text = font.render("Wrecked", True, (255, 0, 0), (0, 0, 0))
     text_rect = text.get_rect()
@@ -211,21 +199,23 @@ def end_screen():
     high_score_rect.y = 310
     go.blit(high_score, high_score_rect)
     font4 = pygame.font.SysFont('C:\Windows\Fonts\INFROMAN.TTF', 75)
-    quit = font4.render("Press q to quit", True, (255, 0, 0), (0, 0, 0))
-    quit_rect = quit.get_rect()
+    quit1 = font4.render("Press q to quit", True, (255, 0, 0), (0, 0, 0))
+    quit_rect = quit1.get_rect()
     quit_rect.x = 250
     quit_rect.y = 550
-    go.blit(quit, quit_rect)
+    go.blit(quit1, quit_rect)
     go_rect = go.get_rect()
     go_rect.center = screen_rect.center
     screen.blit(go, go_rect)
     pygame.display.flip()
 
-pygame.display.flip()
-while True:
+
+pygame.display.flip()  # display screens
+
+while True:  # main loop
 
     for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:  # repeat between running game and end game screen
             PW.run_game()
             end_screen()
             continue
@@ -234,16 +224,3 @@ while True:
                 sys.exit()
         elif event.type == pygame.QUIT:
             sys.exit()
-
-
-
-
-
-
-
-
-
-
-
-
-
