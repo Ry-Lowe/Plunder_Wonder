@@ -6,9 +6,13 @@ Instructions:
 
     -Collect gold and avoid the islands
 
-Credits:
+Credits/Sources:
+
     -Ryan Lowe
+
     -Dr. Donnal
-    -Alien_Invasion
+
+    -Alien_Invasion, Eric MATTHES
 
 Screenshot:
+![img.png](img.png)
